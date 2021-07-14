@@ -1,4 +1,4 @@
-const arrBase = [                                   // y
+const arrBase = [                                   // 
     ['#', '#', '#', '#', '#', '#', '#', '#', '#'],  // 0
     ['#', '+', '+', '+', '#', '+', '+', '+', '#'],  // 1
     ['#', '+', '#', '+', '#', '+', '#', '+', '#'],  // 2
@@ -7,7 +7,7 @@ const arrBase = [                                   // y
     ['#', '#', '+', '+', '#', '#', '#', '#', '#'],  // 5
     ['#', '#', '+', '#', '#', '#', '#', '#', '#'],  // 6
     ['#', '#', '#', '#', '#', '#', '#', '#', '#'],  // 7
-]  // 0    1    2    3    4    5    6    7    8                 x
+]  // 0    1    2    3    4    5    6    7    8                 
 
 let saveWay = [];
 
@@ -30,21 +30,31 @@ function findStart(array) {
 }
 
 function findEnd(array) {
-    let res_x = 0;
-    let res_y = 0;
+    let res_x = null;
+    let res_y = null;
 
-    for (let i = 0; i < array.length; i++) {
+    outer: for (let i = 0; i < array.length; i++) {
         let element = array[i];
 
-        for (let n = 0; n < element.length; n++) {
-            if ((i === 0 || i === array.length - 1) && element[n] === '+') {
-                res !== -1 ? console.log(i + ' ' + n) : 0;
-            }
-            if ((n === 0 || n === element.length - 1) && element[n] === '+') {
-                res_x = n;
+        let res = element.findIndex(value => value === '+');
+        if (i === 0 || i === array.length - 1) {
+            if (res !== -1) {
+                res_x = res;
                 res_y = i;
             }
+        } else {
+            for (let n = 0; n < element.length; n += (element.length - 1)) {
+                if ((n === 0 || n === element.length - 1) && element[n] === '+') {
+                    res_x = n;
+                    res_y = i;
+                    break outer;
+                }
+            }
         }
+    }
+
+    if (res_x === null && res_y === null) {
+        return false;
     }
 
     return { x: res_x, y: res_y }
@@ -79,18 +89,18 @@ function check(start, end) {
         flag = 1;
     }
 
-    if (!flag) {
-        saveWay = [];
+    if (!flag) {        
+        saveWay = [];       
     }
-
+    
     if (arr_cord.length > 0) {
         for (let index = 0; index < arr_cord.length; index++) {
             let element = arr_cord[index];
             saveWay.push(element.step);
-
+                      
             let result = element.x === end.x && element.y === end.y;
             let notVisited = arrBase[element.y][element.x] !== '-';
-            
+
             if (result || (notVisited && check(element, end))) {
                 return saveWay;
             }
@@ -99,6 +109,8 @@ function check(start, end) {
     return false;
 }
 
-
-
-console.log(check(start_cord, end_cord));
+if (!end_cord) {
+    alert('This maze with no exit.')
+} else {
+    console.log(check(start_cord, end_cord));
+};
