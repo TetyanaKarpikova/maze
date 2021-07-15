@@ -89,15 +89,12 @@ function check(start, end) {
         flag = 1;
     }
 
-    if (!flag) {        
-        saveWay = [];       
-    }
-    
     if (arr_cord.length > 0) {
         for (let index = 0; index < arr_cord.length; index++) {
             let element = arr_cord[index];
-            saveWay.push(element.step);
-                      
+            
+            saveWay.push(element.step);            
+
             let result = element.x === end.x && element.y === end.y;
             let notVisited = arrBase[element.y][element.x] !== '-';
 
@@ -106,11 +103,14 @@ function check(start, end) {
             }
         }
     }
+    
+    saveWay.pop();
     return false;
 }
+
 
 if (!end_cord) {
     alert('This maze with no exit.')
 } else {
-    console.log(check(start_cord, end_cord));
+    console.log(check(start_cord, end_cord));    
 };
